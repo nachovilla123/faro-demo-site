@@ -10,11 +10,11 @@
     <h1>Fixture de prueba FARO — ciclo 2</h1>
     <form>
       <p><label for="c2-err-mail">Correo</label>
-      <input id="c2-err-mail" name="c2-err-mail" type="email" aria-invalid="true">
+      <input aria-describedby="c2-err-mail-msg" id="c2-err-mail" name="c2-err-mail" type="email" aria-invalid="true">
       <span class="error" id="c2-err-mail-msg">Ingresá un correo válido.</span></p>
 
       <p><label for="c2-err-cp">Código postal</label>
-      <input id="c2-err-cp" name="c2-err-cp" type="text" class="is-invalid" aria-describedby="c2-err-cp-msg">
+      <input aria-invalid="true" id="c2-err-cp" name="c2-err-cp" type="text" class="is-invalid" aria-describedby="c2-err-cp-msg">
       <span class="error" id="c2-err-cp-msg">El código postal no es válido.</span></p>
 
       <p><label for="c2-err-tel">Celular</label>
