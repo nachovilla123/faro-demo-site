@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ciclo 2 — c2-status-extra</title>
+  <link rel="stylesheet" href="css/c2-status-extra.css">
+</head>
+<body>
+  <main>
+    <h1>Fixture de prueba FARO — ciclo 2</h1>
+    <div role="status" aria-live="off" class="toast c2-se-off"></div>
+    <ul class="form-errors c2-se-list"></ul>
+    <p>Errores: <span class="error-count c2-se-count">3</span></p>
+    <div class="toast c2-se-toast"></div>
+    <div class="toast c2-se-toast"></div>
+    <button type="button" id="c2-se-go">Guardar</button>
+    <script>
+      document.getElementById('c2-se-go').addEventListener('click', () => {
+        const d = document.createElement('div'); d.textContent = 'Guardado'; document.body.appendChild(d);
+      });
+    </script>
+  </main>
+</body>
+</html>

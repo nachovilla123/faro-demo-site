@@ -1,0 +1,3 @@
+@media (min-width: 768px) {
+  .c2-md-btn:focus { outline: none; }
+}

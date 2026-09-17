@@ -1,0 +1,3 @@
+@media (orientation: portrait) {
+  .c2-orient-body { transform: rotate(90deg); }
+}

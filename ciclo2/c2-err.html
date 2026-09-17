@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ciclo 2 — c2-err</title>
+</head>
+<body>
+  <main>
+    <h1>Fixture de prueba FARO — ciclo 2</h1>
+    <form>
+      <p><label for="c2-err-mail">Correo</label>
+      <input id="c2-err-mail" name="c2-err-mail" type="email" aria-invalid="true">
+      <span class="error" id="c2-err-mail-msg">Ingresá un correo válido.</span></p>
+
+      <p><label for="c2-err-cp">Código postal</label>
+      <input id="c2-err-cp" name="c2-err-cp" type="text" class="is-invalid" aria-describedby="c2-err-cp-msg">
+      <span class="error" id="c2-err-cp-msg">El código postal no es válido.</span></p>
+
+      <p><label for="c2-err-tel">Celular</label>
+      <input id="c2-err-tel" name="c2-err-tel" type="tel" aria-invalid="true">
+      <span class="error">El celular tiene que tener 10 dígitos.</span></p>
+    </form>
+  </main>
+</body>
+</html>

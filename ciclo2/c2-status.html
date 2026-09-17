@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Fixture HU-39 — mensajes de estado con y sin live region</title>
+  <style>
+    body { margin: 0; padding: 24px; font-family: sans-serif; }
+    /* El toast del caso (b) se oculta por CSS, que es como lo hace la mayoría
+       de los frameworks: el JS del sitio le saca la clase al mostrarlo. */
+    .toast { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Fixture de mensajes de estado (WCAG 4.1.3)</h1>
+
+  <!-- ================================================================= *
+   * (a) VIOLA — contenedor de error vacío, sin live region. El JS del
+   * sitio le escribe adentro "La contraseña es débil" al validar el
+   * formulario y el lector de pantalla no anuncia nada: el foco sigue en
+   * el campo. Vocabulario `error` → bucket "error" → role="alert".
+   * ================================================================= -->
+  <form>
+    <label for="password">Contraseña</label>
+    <input id="password" type="password" />
+    <div class="form-error"></div>
+  </form>
+
+  <!-- ================================================================= *
+   * (b) VIOLA — toast oculto por CSS, sin live region. Vocabulario
+   * `toast` → bucket "status" → role="status".
+   * ================================================================= -->
+  <div class="toast" id="save-toast"></div>
+
+  <!-- ================================================================= *
+   * (c) NO VIOLA — mismo patrón que (a) pero el contenedor YA declara
+   * role="status": el cambio se anuncia y no hay nada que remediar.
+   * ================================================================= -->
+  <div class="status-message" role="status"></div>
+
+  <!-- ================================================================= *
+   * (d) NO VIOLA — `message` no está en ninguno de los dos vocabularios:
+   * lo descarta la compuerta (1), antes de mirar si se llena dinámicamente.
+   * El caso simétrico —vocabulario de estado PERO con texto visible, que es
+   * el que descarta la compuerta (2)— es el (g).
+   * ================================================================= -->
+  <div class="message">Tus datos se guardan en Argentina.</div>
+
+  <!-- ================================================================= *
+   * (e) NO VIOLA — el contenedor está vacío y no declara nada, pero
+   * hereda el anuncio del ancestro con aria-live="polite".
+   * ================================================================= -->
+  <div aria-live="polite">
+    <span class="notification-body"></span>
+  </div>
+
+  <!-- ================================================================= *
+   * (f) NO VIOLA — <output> tiene rol nativo `status`, así que se anuncia
+   * solo aunque esté vacío. El detector lo excluye siempre.
+   * ================================================================= -->
+  <output id="result-status" for="password"></output>
+
+  <!-- ================================================================= *
+   * (g) NO VIOLA — vocabulario de estado (`notice`) pero con texto
+   * visible en la carga: es un aviso estático que el lector ya lee al
+   * recorrer la página, no un mensaje que aparezca después. Es el caso
+   * que separa la compuerta (2) de la (1).
+   * ================================================================= -->
+  <p class="page-notice">El sitio va a estar en mantenimiento el domingo.</p>
+
+  <!-- ================================================================= *
+   * (h) VIOLA — CONTADOR. Está visible y con texto desde la carga, así que
+   * la compuerta 2 lo dejaría pasar de largo si no fuera por la excepción
+   * de contadores: vocabulario `count` + texto numérico. Cuando el JS lo
+   * suba a 4, el lector de pantalla no anuncia nada.
+   * ================================================================= -->
+  <span class="cart-count">3</span>
+
+  <!-- ================================================================= *
+   * (i) NO VIOLA — vocabulario de contador PERO el texto no es un número:
+   * es el caso que prueba que hacen falta las dos señales juntas. Sin el
+   * requisito numérico, cualquier cartel con `badge` en la clase entraría.
+   * ================================================================= -->
+  <span class="badge">Nuevo</span>
+</body>
+</html>

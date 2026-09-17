@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Fixture HU-38 — errores con y sin sugerencia de corrección</title>
+</head>
+<body>
+  <h1>Fixture de sugerencias ante errores (WCAG 3.3.3)</h1>
+
+  <form>
+    <!-- ================================================================= *
+     * (a) VIOLA — `pattern` + `title`: el marcado declara el formato, así
+     * que la sugerencia ES conocida, y el mensaje no la menciona. Es el
+     * ejemplo de la matriz WCAG para 3.3.3: «Campo inválido» → habría que
+     * decir el formato XX-XXXXXXXX-X.
+     * ================================================================= -->
+    <div class="form-group">
+      <label for="cuit">CUIT</label>
+      <input
+        id="cuit"
+        name="cuit"
+        type="text"
+        pattern="[0-9]{2}-[0-9]{8}-[0-9]"
+        title="XX-XXXXXXXX-X"
+        value="20"
+        aria-invalid="true"
+        aria-describedby="cuit-msg"
+      />
+      <span id="cuit-msg">El campo es inválido.</span>
+    </div>
+
+    <!-- ================================================================= *
+     * (b) VIOLA — `<select>`: el conjunto cerrado de valores admitidos es
+     * la sugerencia misma (Situación B de la norma, técnica G85), y el
+     * mensaje no nombra ninguno.
+     * ================================================================= -->
+    <div class="form-group">
+      <label for="provincia">Provincia</label>
+      <select id="provincia" name="provincia" aria-invalid="true" aria-describedby="provincia-msg">
+        <option value="">Elegí una opción</option>
+        <option value="BA">Buenos Aires</option>
+        <option value="CB">Córdoba</option>
+        <option value="SF">Santa Fe</option>
+      </select>
+      <span id="provincia-msg">El valor ingresado no es correcto.</span>
+    </div>
+
+    <!-- ================================================================= *
+     * (c) VIOLA — `<datalist>`: mismo caso que (b) pero el conjunto cuelga
+     * de `list=`, que es otra rama del extractor.
+     * ================================================================= -->
+    <div class="form-group">
+      <label for="marca">Marca</label>
+      <input
+        id="marca"
+        name="marca"
+        type="text"
+        list="marcas"
+        value="zzz"
+        aria-invalid="true"
+        aria-errormessage="marca-msg"
+      />
+      <datalist id="marcas">
+        <option value="Fiat"></option>
+        <option value="Ford"></option>
+        <option value="Renault"></option>
+      </datalist>
+      <span id="marca-msg">Marca no reconocida.</span>
+    </div>
+
+    <!-- ================================================================= *
+     * (d) VIOLA — combobox ARIA que declara su `role="listbox"` por
+     * `aria-controls`: tercera rama del extractor de opciones, la única
+     * que no existe en HTML nativo.
+     * ================================================================= -->
+    <div class="form-group">
+      <span id="moneda-label">Moneda</span>
+      <input
+        id="moneda"
+        name="moneda"
+        role="combobox"
+        aria-controls="moneda-listbox"
+        aria-labelledby="moneda-label"
+        value="XXX"
+        aria-invalid="true"
+        aria-describedby="moneda-msg"
+      />
+      <ul id="moneda-listbox" role="listbox">
+        <li role="option">Peso argentino</li>
+        <li role="option">Dólar estadounidense</li>
+        <li role="option">Euro</li>
+      </ul>
+      <span id="moneda-msg">Ese dato no está permitido.</span>
+    </div>
+
+    <!-- ================================================================= *
+     * (e) VIOLA — borde numérico. El marcado declara `min="10"` y el
+     * mensaje dice «100»: contiene los dos caracteres pero NO menciona el
+     * límite. Con una frontera `\b` ingenua esto pasaría por cumplido y el
+     * criterio se daría por satisfecho sin estarlo.
+     * ================================================================= -->
+    <div class="form-group">
+      <label for="cantidad">Cantidad</label>
+      <input
+        id="cantidad"
+        name="cantidad"
+        type="number"
+        min="10"
+        value="2"
+        aria-invalid="true"
+        aria-describedby="cantidad-msg"
+      />
+      <span id="cantidad-msg">Pedido rechazado (orden 100).</span>
+    </div>
+
+    <!-- ================================================================= *
+     * (f) NO VIOLA — el mensaje YA provee la sugerencia: menciona el
+     * `min="18"` declarado. El criterio se cumple y no hay nada que
+     * reportar.
+     * ================================================================= -->
+    <div class="form-group">
+      <label for="edad">Edad</label>
+      <input
+        id="edad"
+        name="edad"
+        type="number"
+        min="18"
+        value="12"
+        aria-invalid="true"
+        aria-describedby="edad-msg"
+      />
+      <span id="edad-msg">Tenés que tener 18 años o más.</span>
+    </div>
+
+    <!-- ================================================================= *
+     * (g) NO VIOLA — excepción normativa de seguridad: `type="password"`.
+     * Declara `minlength` y el mensaje no lo menciona, así que sin la
+     * guarda saldría un Issue pidiendo publicar la política de
+     * contraseñas en el error de un login.
+     * ================================================================= -->
+    <div class="form-group">
+      <label for="clave">Contraseña</label>
+      <input
+        id="clave"
+        name="clave"
+        type="password"
+        minlength="12"
+        aria-invalid="true"
+        aria-describedby="clave-msg"
+      />
+      <span id="clave-msg">La contraseña no cumple los requisitos.</span>
+    </div>
+
+    <!-- ================================================================= *
+     * (h) VIOLA — `type="email"` SÍ declara una restricción: el formato de un
+     * email es fijo y universal, así que la sugerencia es conocida (condición 2
+     * de la norma se cumple). El mensaje no da ninguna pista de la forma
+     * esperada — no menciona el `@` ni muestra un ejemplo.
+     *
+     * El `required` por sí solo seguiría sin declarar nada: "es obligatorio" ya
+     * es la sugerencia completa. Lo que hace hallazgo a este campo es el `type`.
+     * ================================================================= -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        required
+        value="hola"
+        aria-invalid="true"
+        aria-describedby="email-msg"
+      />
+      <span id="email-msg">El email no es válido.</span>
+    </div>
+
+    <!-- ================================================================= *
+     * (i) NO VIOLA 3.3.3 — VIOLA 3.3.1. Declara `pattern`+`title` y el
+     * mensaje no los menciona, pero el campo ni siquiera está identificado
+     * como erróneo (`.is-invalid` pinta el borde, no declara nada): el
+     * hallazgo le corresponde al otro detector. Es el caso que sostiene la
+     * exclusión mutua entre los dos criterios.
+     * ================================================================= -->
+    <div class="form-group">
+      <label for="legajo">Legajo</label>
+      <input
+        id="legajo"
+        name="legajo"
+        type="text"
+        class="is-invalid"
+        pattern="[0-9]{6}"
+        title="Seis dígitos"
+        value="12"
+      />
+      <span id="legajo-msg">El legajo no existe.</span>
+    </div>
+
+    <!-- ================================================================= *
+     * (j) NO VIOLA 3.3.3 — VIOLA 3.3.1, y es el caso límite: a diferencia
+     * de (i), acá el mensaje SÍ está asociado por `aria-describedby`. Lo
+     * único que falta es `aria-invalid`, así que si la guarda de 3.3.3
+     * mirara solo el mensaje —y no las dos señales— este campo saldría en
+     * los dos criterios a la vez.
+     * ================================================================= -->
+    <div class="form-group">
+      <label for="sucursal">Sucursal</label>
+      <input
+        id="sucursal"
+        name="sucursal"
+        type="text"
+        class="is-invalid"
+        pattern="[A-Z]{3}[0-9]{2}"
+        title="Tres letras y dos dígitos"
+        value="ab"
+        aria-describedby="sucursal-msg"
+      />
+      <span id="sucursal-msg">La sucursal no es válida.</span>
+    </div>
+
+    <button type="button">Enviar</button>
+  </form>
+</body>
+</html>

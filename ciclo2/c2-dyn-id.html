@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ciclo 2 — c2-dyn-id</title>
+</head>
+<body>
+  <main>
+    <h1>Fixture de prueba FARO — ciclo 2</h1>
+    <p>Producto destacado de la semana.</p>
+    <img id="c2-dyn-placeholder" src="https://nachovilla123.github.io/faro-demo-site/ciclo2/img/c2-taza-roja.png" width="200" height="150">
+    <script>document.getElementById("c2-dyn-placeholder").id = "img-" + Math.random().toString(36).slice(2);</script>
+  </main>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Fixture HU-25 — modal que atrapa el foco y NO libera con Escape</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+    #backdrop {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5);
+    }
+    #modal {
+      position: fixed; top: 120px; left: 50%; transform: translateX(-50%);
+      width: 320px; padding: 16px; background: #fff; border: 2px solid #123456;
+    }
+    /* El contenido de fondo queda visible y enfocable: el recorrido DEBERÍA
+       poder llegar a él, y no puede. Esa es la violación. */
+    main { padding: 24px; }
+    main button, main a, main input { display: block; margin: 8px 0; }
+  </style>
+</head>
+<body>
+  <!-- Caso canónico de 2.1.2: el foco cicla `#modal-first → #modal-last →
+       #modal-first` y no sale. No deja `TrapCandidate` (ningún selector se
+       repite dos veces SEGUIDAS), así que la única señal es el ratio:
+       2 visitados sobre 10 enfocables. Y NO hay handler de Escape: el
+       componente no ofrece ninguna salida estándar. -->
+  <div id="backdrop"></div>
+  <div id="modal" role="dialog" aria-modal="true" aria-label="Suscribite">
+    <p>Suscribite al newsletter</p>
+    <button id="modal-first" type="button">Aceptar</button>
+    <button id="modal-last" type="button">Cancelar</button>
+  </div>
+
+  <!-- 8 enfocables fuera del modal (+2 adentro = 10 en total): suficiente para
+       superar el piso de MIN_FOCUSABLE_FOR_CYCLE y el de
+       MIN_UNVISITED_ELEMENTS con el ratio de MAX_VISITED_RATIO. -->
+  <main>
+    <a href="#uno">Enlace de fondo 1</a>
+    <a href="#dos">Enlace de fondo 2</a>
+    <a href="#tres">Enlace de fondo 3</a>
+    <button id="bg-btn-1" type="button">Botón de fondo 1</button>
+    <button id="bg-btn-2" type="button">Botón de fondo 2</button>
+    <button id="bg-btn-3" type="button">Botón de fondo 3</button>
+    <input id="bg-input" type="text" aria-label="Campo de fondo" />
+    <select id="bg-select" aria-label="Selector de fondo">
+      <option>Una opción</option>
+    </select>
+  </main>
+
+  <script>
+    // Trampa: el handler reenvía el foco dentro del modal en cada Tab, y no
+    // escucha Escape. Es exactamente el patrón que 2.1.2 prohíbe.
+    const first = document.getElementById('modal-first');
+    const last = document.getElementById('modal-last');
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Tab') {
+        return;
+      }
+      event.preventDefault();
+      if (event.shiftKey) {
+        (document.activeElement === first ? last : first).focus();
+      } else {
+        (document.activeElement === last ? first : last).focus();
+      }
+    });
+
+    // El foco entra al modal apenas carga la página (como haría un modal real).
+    window.addEventListener('load', () => { first.focus(); });
+  </script>
+</body>
+</html>
