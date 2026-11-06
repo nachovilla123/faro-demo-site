@@ -22,14 +22,14 @@
   <form>
     <label for="password">Contraseña</label>
     <input id="password" type="password" />
-    <div class="form-error"></div>
+    <div role="alert" class="form-error"></div>
   </form>
 
   <!-- ================================================================= *
    * (b) VIOLA — toast oculto por CSS, sin live region. Vocabulario
    * `toast` → bucket "status" → role="status".
    * ================================================================= -->
-  <div class="toast" id="save-toast"></div>
+  <div role="status" class="toast" id="save-toast"></div>
 
   <!-- ================================================================= *
    * (c) NO VIOLA — mismo patrón que (a) pero el contenedor YA declara
@@ -73,7 +73,7 @@
    * de contadores: vocabulario `count` + texto numérico. Cuando el JS lo
    * suba a 4, el lector de pantalla no anuncia nada.
    * ================================================================= -->
-  <span class="cart-count">3</span>
+  <span role="status" class="cart-count">3</span>
 
   <!-- ================================================================= *
    * (i) NO VIOLA — vocabulario de contador PERO el texto no es un número:
